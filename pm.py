@@ -18,7 +18,7 @@ class OutputModel(BaseModel):
     table: list[dict]
     image: str | None = None
     text: str | None = None
-    plot: str | None = None
+    plot: Union[str, list[str], None] = None
     big_plot: Union[str, List[str], None] = None
     process_model: str | None = None
 

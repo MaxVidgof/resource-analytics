@@ -243,10 +243,18 @@ async def read_units(session_id: str = Depends(get_session_id)):
     df = sessions[session_id]["dataframe"]
     return activity_resource_comparison(df)
 
-@app.get("/activity_resource_comparison_norm")
+@app.get("/activity_resource_role_comparison_norm")
 async def read_units(session_id: str = Depends(get_session_id)):
-    df = sessions[session_id]["dataframe"]
-    return activity_resource_comparison(df, normalize=True)
+    try:
+        df = sessions[session_id]["dataframe"]
+        return activity_resource_role_comparison(df, normalize=True)
+    except Exception as e:
+        print("❌ Error in activity_resource_role_comparison_norm")
+        traceback.print_exc()
+        return JSONResponse(
+            status_code=500,
+            content={"detail": str(e)}
+        )
 
 @app.get("/activity_resource_role_comparison_norm")
 async def read_units(session_id: str = Depends(get_session_id)):

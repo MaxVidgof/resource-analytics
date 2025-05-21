@@ -750,79 +750,76 @@ def activity_resource_comparison(df, normalize: bool = False):
         return OutputModel(table=prettify_df(normalized_data).replace({np.nan: None}).to_dict(orient="records"), plot=plot, big_plot=big_plot)
 
 
-def activity_resource_role_comparison(df, normalize: bool = False):
-    # Group by Role, Activity, and Resource
-    grouped_activities = df.groupby(['Role', 'Activity', 'Resource'])
+def activity_resource_role_comparison(df, normalize: bool = True):
+    
+    print("🟢 Function entered: activity_resource_role_comparison")
+    print("➡️ Columns:", df.columns.tolist())
+    print("➡️ Sample data:", df.head())
+
+    try:
+        grouped = df.groupby(['Role', 'Activity', 'Resource'])
+    except Exception as e:
+        print("❌ Grouping failed:", e)
+        raise
 
     result_list = []
 
-    # Iterate through each activity and resource group
-    for (role, activity, resource), group_df in grouped_activities:
-        average_duration = group_df.groupby('Case ID')['Duration'].sum().mean()
-        result_list.append({
-            "Role": role,
-            "Activity": activity,
-            "Resource": resource,
-            "Average Case Duration": average_duration
-        })
+    for (role, activity, resource), group_df in grouped:
+        try:
+            avg = group_df.groupby('Case ID')['Duration'].sum().mean()
+            result_list.append({
+                "Role": role,
+                "Activity": activity,
+                "Resource": resource,
+                "Average Case Duration": avg
+            })
+        except Exception as e:
+            print(f"Failed on group ({role}, {activity}, {resource}):", e)
 
     result_df = pd.DataFrame(result_list)
+    print("Result DataFrame created. Shape:", result_df.shape)
 
     if normalize:
-        result_df['Normalized Duration'] = result_df.groupby('Activity')['Average Case Duration'].transform(
-            lambda x: (x - x.min()) / (x.max() - x.min())
-        )
+        try:
+            result_df['Normalized Duration'] = result_df.groupby('Activity')['Average Case Duration'].transform(
+                lambda x: (x - x.min()) / (x.max() - x.min())
+            )
+        except Exception as e:
+            print("Normalization failed:", e)
+            raise
 
-        normalized_data = result_df.copy()
-        normalized_data['Average Case Duration'] = (normalized_data['Average Case Duration'].dt.total_seconds() / 60).round(2)
-        normalized_data.rename({'Average Case Duration': 'Average Case Duration (Minutes)'}, axis=1, inplace=True)
+        try:
+            if pd.api.types.is_timedelta64_dtype(result_df['Average Case Duration']):
+                result_df['Average Case Duration'] = result_df['Average Case Duration'].dt.total_seconds() / 60
+            result_df['Average Case Duration'] = result_df['Average Case Duration'].astype(float).round(2)
+        except Exception as e:
+            print("Duration conversion failed:", e)
+            raise
 
-        unique_roles = normalized_data['Role'].unique()
-        n_roles = len(unique_roles)
+        result_df.rename({'Average Case Duration': 'Average Case Duration (Minutes)'}, axis=1, inplace=True)
 
-        cols = min(3, n_roles)  # Max 3 columns for layout
-        rows = int(np.ceil(n_roles / cols))
-
-        fig = make_subplots(rows=rows, cols=cols,
-                            subplot_titles=[f'Role: {role}' for role in unique_roles],
-                            horizontal_spacing=0.05, vertical_spacing=0.1)
-
-        color_scale = 'YlGnBu'
-
-        for idx, role in enumerate(unique_roles):
-            role_df = normalized_data[normalized_data['Role'] == role]
+        plot_list = []
+        for role in result_df['Role'].unique():
+            role_df = result_df[result_df['Role'] == role]
             pivot_table = role_df.pivot(index='Activity', columns='Resource', values='Normalized Duration')
-            hover_text = role_df.pivot(index='Activity', columns='Resource', values='Average Case Duration (Minutes)')
-            hover_text = hover_text.applymap(lambda x: f'Average Case Duration: {x:.2f} minutes' if pd.notnull(x) else '')
 
-            row = idx // cols + 1
-            col = idx % cols + 1
+            if pivot_table.isnull().all().all():
+                print(f" All values missing for role {role} heatmap — skipping.")
+                continue
 
-            heatmap = go.Heatmap(
+            fig = go.Figure(data=go.Heatmap(
                 z=pivot_table.values,
                 x=pivot_table.columns,
                 y=pivot_table.index,
-                hoverinfo='text',
-                text=hover_text.values,
                 colorscale=color_scale,
-                showscale=(idx == 0),  # Show colorbar only on first subplot
-                colorbar=dict(title='Normalized Duration', tickvals=[0, 1], ticktext=['Fastest', 'Slowest']) if idx == 0 else None,
-                xgap=2,
-                ygap=2
-            )
+                showscale=True
+            ))
+            plot_list.append(fig.to_json())
 
-            fig.add_trace(heatmap, row=row, col=col)
-
-        fig.update_layout(
-            height=300 * rows,
-            width=400 * cols,
-            title_text='Normalized Average Case Duration per Activity and Resource by Role',
-            plot_bgcolor='white'
-        )
-
+        print("Returning analysis output.")
         return OutputModel(
-            table=prettify_df(normalized_data).replace({np.nan: None}).to_dict(orient="records"),
-            plot=[fig.to_json()]
+            table=result_df.to_dict(orient='records'),
+            plot=plot_list
         )
 
 

@@ -247,6 +247,11 @@ async def read_units(session_id: str = Depends(get_session_id)):
     df = sessions[session_id]["dataframe"]
     return activity_resource_comparison(df, normalize=True)
 
+@app.get("/activity_resource_role_comparison_norm")
+async def read_units(session_id: str = Depends(get_session_id)):
+    df = sessions[session_id]["dataframe"]
+    return activity_resource_role_comparison(df, normalize=True)
+
 @app.get("/slowest_resource")
 async def read_units(session_id: str = Depends(get_session_id)):
     df = sessions[session_id]["dataframe"]

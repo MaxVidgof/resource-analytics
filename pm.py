@@ -19,7 +19,7 @@ class OutputModel(BaseModel):
     image: str | None = None
     text: str | None = None
     plot: str | None = None
-    big_plot: str | None = None
+    big_plot: Union[str, List[str], None] = None
     process_model: str | None = None
 
 

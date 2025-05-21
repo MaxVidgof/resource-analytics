@@ -819,7 +819,7 @@ def activity_resource_role_comparison(df, normalize: bool = True):
         print("Returning analysis output.")
         return OutputModel(
             table=result_df.to_dict(orient='records'),
-            plot=plot_list
+            big_plot=plot_list
         )
 
 

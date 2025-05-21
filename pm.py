@@ -781,7 +781,7 @@ def activity_resource_role_comparison(df, normalize: bool = False):
         unique_roles = normalized_data['Role'].unique()
 
         for role in unique_roles:     
-            role_df = normalized_data[normalized_data['Role'] == role]
+            role_df = normalized_data[normalized_data['Role'] == "Supplier"]
             pivot_table = role_df.pivot(index='Activity', columns='Resource', values='Normalized Duration')
     
             # Define the hover text to show both the average duration in minutes and the normalized value

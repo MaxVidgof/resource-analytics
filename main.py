@@ -54,6 +54,7 @@ from pm import (
     activities_per_role,
     activity_average_duration_with_roles,
     activity_resource_comparison,
+    activity_resource_role_comparison,
     slowest_resource_per_activity,
     calculate_working_days,
     capacity_utilization_resource,

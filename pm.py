@@ -814,7 +814,7 @@ def activity_resource_role_comparison(df, normalize: bool = False):
     
             plot_list.append(fig.to_json())
 
-        return OutputModel(table=prettify_df(normalized_data).replace({np.nan: None}).to_dict(orient="records"), big_plot=plot_list)
+    return OutputModel(table=[], big_plot=json.dumps(["test"]))
 
 
 

@@ -751,71 +751,79 @@ def activity_resource_comparison(df, normalize: bool = False):
 
 
 def activity_resource_role_comparison(df, normalize: bool = False):
-    # Group by Activity and then Resource
+    # Group by Role, Activity, and Resource
     grouped_activities = df.groupby(['Role', 'Activity', 'Resource'])
 
-    # Initialize a DataFrame to store the results
     result_list = []
 
     # Iterate through each activity and resource group
     for (role, activity, resource), group_df in grouped_activities:
-        # Calculate the sum of durations for each case, then find the mean
         average_duration = group_df.groupby('Case ID')['Duration'].sum().mean()
-        result_list.append({"Role": role, "Activity": activity, "Resource": resource, "Average Case Duration": average_duration})
+        result_list.append({
+            "Role": role,
+            "Activity": activity,
+            "Resource": resource,
+            "Average Case Duration": average_duration
+        })
 
-    # Convert list to DataFrame
     result_df = pd.DataFrame(result_list)
 
-    # Apply Min-Max Normalization within each activity
     if normalize:
-        result_df['Normalized Duration'] = result_df.groupby('Activity')['Average Case Duration'].transform(lambda x: (x - x.min()) / (x.max() - x.min()))
+        result_df['Normalized Duration'] = result_df.groupby('Activity')['Average Case Duration'].transform(
+            lambda x: (x - x.min()) / (x.max() - x.min())
+        )
 
         normalized_data = result_df.copy()
-
-        # Convert 'Average Case Duration' from Timedelta to minutes
         normalized_data['Average Case Duration'] = (normalized_data['Average Case Duration'].dt.total_seconds() / 60).round(2)
-        normalized_data.rename({'Average Case Duration':'Average Case Duration (Minutes)'}, axis=1, inplace=True)
+        normalized_data.rename({'Average Case Duration': 'Average Case Duration (Minutes)'}, axis=1, inplace=True)
 
-        #heatmaps per role
-        plot_list = []
         unique_roles = normalized_data['Role'].unique()
+        n_roles = len(unique_roles)
 
-        for role in unique_roles:     
+        cols = min(3, n_roles)  # Max 3 columns for layout
+        rows = int(np.ceil(n_roles / cols))
+
+        fig = make_subplots(rows=rows, cols=cols,
+                            subplot_titles=[f'Role: {role}' for role in unique_roles],
+                            horizontal_spacing=0.05, vertical_spacing=0.1)
+
+        color_scale = 'YlGnBu'
+
+        for idx, role in enumerate(unique_roles):
             role_df = normalized_data[normalized_data['Role'] == role]
             pivot_table = role_df.pivot(index='Activity', columns='Resource', values='Normalized Duration')
-    
-            # Define the hover text to show both the average duration in minutes and the normalized value
             hover_text = role_df.pivot(index='Activity', columns='Resource', values='Average Case Duration (Minutes)')
             hover_text = hover_text.applymap(lambda x: f'Average Case Duration: {x:.2f} minutes' if pd.notnull(x) else '')
 
-            # Now create the heatmap using Plotly
-            fig = go.Figure(data=go.Heatmap(
+            row = idx // cols + 1
+            col = idx % cols + 1
+
+            heatmap = go.Heatmap(
                 z=pivot_table.values,
                 x=pivot_table.columns,
                 y=pivot_table.index,
                 hoverinfo='text',
                 text=hover_text.values,
                 colorscale=color_scale,
-                colorbar=dict(title='Average Case Duration (normalized)', tickvals=[0, 1], ticktext=['Fastest<br>Resource', 'Slowest<br>Resource'], titleside='right'),
-                showscale=True,
+                showscale=(idx == 0),  # Show colorbar only on first subplot
+                colorbar=dict(title='Normalized Duration', tickvals=[0, 1], ticktext=['Fastest', 'Slowest']) if idx == 0 else None,
                 xgap=2,
                 ygap=2
-            ))
-
-            # Update the layout
-            fig.update_layout(
-                title=dict(text='Normalized Average Case Duration per Activity and Resource<br><sup>Role: {role}</sup>',x=0.5, xanchor='center'),
-                xaxis=dict(title='Resource'),
-                yaxis=dict(title='Activity'),
-                #width=1200,
-                height=600,
-                plot_bgcolor='white'
             )
-    
-            plot_list.append(fig.to_json())
 
-        return OutputModel(table=prettify_df(normalized_data).replace({np.nan: None}).to_dict(orient="records"), plot=plot_list)
+            fig.add_trace(heatmap, row=row, col=col)
 
+        fig.update_layout(
+            height=300 * rows,
+            width=400 * cols,
+            title_text='Normalized Average Case Duration per Activity and Resource by Role',
+            plot_bgcolor='white'
+        )
+
+        return OutputModel(
+            table=prettify_df(normalized_data).replace({np.nan: None}).to_dict(orient="records"),
+            plot=[fig.to_json()]
+        )
 
 
 def slowest_resource_per_activity(df):

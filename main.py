@@ -54,6 +54,7 @@ from pm import (
     activities_per_role,
     activity_average_duration_with_roles,
     activity_resource_comparison,
+    activity_resource_role_comparison,
     slowest_resource_per_activity,
     calculate_working_days,
     capacity_utilization_resource,
@@ -246,6 +247,11 @@ async def read_units(session_id: str = Depends(get_session_id)):
 async def read_units(session_id: str = Depends(get_session_id)):
     df = sessions[session_id]["dataframe"]
     return activity_resource_comparison(df, normalize=True)
+
+@app.get("/activity_resource_role_comparison_norm")
+async def read_units(session_id: str = Depends(get_session_id)):
+    df = sessions[session_id]["dataframe"]
+    return activity_resource_role_comparison(df, normalize=True)
 
 @app.get("/slowest_resource")
 async def read_units(session_id: str = Depends(get_session_id)):

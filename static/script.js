@@ -200,35 +200,12 @@ const analysis = function() {
             if (data.table) {
                 var table = new Tabulator("#resultTable", {data:data.table, autoColumns:true, layout:"fitColumns"});
             }
+
             if (data.plot) {
-    const resultContainer = document.getElementById('resultContainer');
-
-    // Clear existing plots
-    resultContainer.innerHTML = '';
-
-    if (Array.isArray(data.plot)) {
-        // Multiple plots (e.g. one per role)
-        data.plot.forEach((plotJson, index) => {
-            const plotDivId = `plot_${index}`;
-            const plotDiv = document.createElement('div');
-            plotDiv.id = plotDivId;
-            resultContainer.appendChild(plotDiv);
-
-            const figure = JSON.parse(plotJson);
-            Plotly.newPlot(plotDivId, figure.data, figure.layout);
-        });
-    } else {
-        // Single plot
-        const plotDiv = document.createElement('div');
-        plotDiv.id = 'plot';
-        resultContainer.appendChild(plotDiv);
-
-        const figure = JSON.parse(data.plot);
-        Plotly.newPlot('plot', figure.data, figure.layout);
-    }
-}
-
+                figure = JSON.parse(data.plot)
+                Plotly.newPlot('plot', figure.data, figure.layout)
             }
+
             if (data.big_plot) {
                 big_figure = JSON.parse(data.big_plot)
                 Plotly.newPlot('big_plot', big_figure.data, big_figure.layout)

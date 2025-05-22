@@ -4,7 +4,7 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 
 ---
 
-## Project Structure
+## :open_file_folder: Project Structure
 ```
 .
 ├── main.py # FastAPI backend with endpoints
@@ -45,7 +45,7 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 
 ---
 
-## Input Requirements
+## :mag_right: Input Requirements
 Input logs **must be in CSV format** and include the following columns:
 
 | Column              | Description                     |

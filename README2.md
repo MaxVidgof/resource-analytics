@@ -1,4 +1,4 @@
-# REOSURCE ANALYTICS TOOL
+# :busts_in_silhouette::bar_chart: RESOURCE ANALYTICS TOOL
 
 The following **Resource Analytics Tool** is a web-based application for analyzing resource-related insights from event logs. It visualizes metrics from four critical areas: resource allocation, resource performance, workload distribution, and capacity utilization using interactive plots and tables.
 
@@ -15,8 +15,8 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 ├── requirements.txt # Python dependencies
 ├── deployment.yaml # Kubernetes deployment config
 ├── hardcoded # event logs
-│ ├── Purchasing example.csv
-│ ├── Purchasing example.csv
+│ ├── PurchasingExample.csv # example event log
+│ ├── PurchasingEexamplePseudo.csv # example event log with pseudonomization (default log)
 ├── static/
 │ ├── index.html # Frontend HTML
 │ ├── style.css # Styling

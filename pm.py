@@ -1621,7 +1621,7 @@ def capacity_utilization_activity_new(df):
     #return result_df
     capacity_utilization_activity_plot = result_df.copy()
     fig = px.bar(capacity_utilization_activity_plot, x='Capacity Utilization (%)', y='Activity',
-        title='Percentage of Time Spent in Each Role by Resource',
+        title='Capacity Utilization per Activity',
         color_discrete_sequence=['#2066a8'],
         orientation="h")
 

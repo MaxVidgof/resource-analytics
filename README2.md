@@ -24,6 +24,7 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 └── ...
 ```
 ---
+```
 .
 +-- _config.yml
 +-- _drafts
@@ -42,7 +43,7 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 |   +-- members.yml
 +-- _site
 +-- index.html
-
+```
 ---
 
 ## :rocket: Features

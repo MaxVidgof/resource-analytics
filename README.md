@@ -39,12 +39,18 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 ## :whale: Docker Usage
 
 1. Build the container: `docker build -t resource-analytics .`
-4. Run the container: `docker run -p 9090:9090 -ti resource-analytics`
-5. Access the interface: open your browser and navigate to: http://localhost:9090
+2. Run the container: `docker run -p 9090:9090 -ti resource-analytics`
+3. Access the interface: open your browser and navigate to: http://localhost:9090
+
+This setup allows you to test the functionality with a default log (PurchasingExample). 
+If you want to analyze your own event log: 
+
+4. Uncomment the line `#RUN python3 unlock.py` in the Dockerfile.
+5. Repeat steps 1-3.
 
 ---
 
-## :mag_right: Input Requirements
+## :page_facing_up: Input Requirements
 Input logs **must be in CSV format** and include the following columns:
 
 - `Case ID`           : Unique identifier per process   
@@ -53,15 +59,6 @@ Input logs **must be in CSV format** and include the following columns:
 - `Activity`          : Activity name                   
 - `Resource`          : Resource name/identifier       
 - `Role`              : Role of the resource            
-
----
-
-## :page_facing_up: Upload Logs
-The upload section allows you to load an event log. A default log (PurchasingExample) is used if no file is selected.
-
-To use your own event log:
-1. Uncomment the line `#RUN python3 unlock.py` in the Dockerfile.
-2. Rebuild and re-run the container.
 
 ---
 

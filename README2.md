@@ -48,21 +48,12 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 ## :mag_right: Input Requirements
 Input logs **must be in CSV format** and include the following columns:
 
-| Column              | Description                     |
-|:--------------------|:--------------------------------|
-| `Case ID`           | Unique identifier per process   |
-| `Start Timestamp`   | Activity start time             |
-| `Complete Timestamp`| Activity end time               |
-| `Activity`          | Activity name                   |
-| `Resource`          | Human resource identifier       |
-| `Role`              | Role of the resource            |
-
-`Case ID`           : Unique identifier per process   
-`Start Timestamp`   : Activity start time             
-`Complete Timestamp`: Activity end time               
-`Activity`          : Activity name                   
-`Resource`          : Human resource identifier       
-`Role`              : Role of the resource            
+- `Case ID`           : Unique identifier per process   
+- `Start Timestamp`   : Activity start time             
+- `Complete Timestamp`: Activity end time               
+- `Activity`          : Activity name                   
+- `Resource`          : Human resource identifier       
+- `Role`              : Role of the resource            
 
 ---
 

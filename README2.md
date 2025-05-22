@@ -48,7 +48,7 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 Input logs **must be in CSV format** and include the following columns:
 
 | Column              | Description                     |
-|---------------------|---------------------------------|
+|:--------------------|:--------------------------------|
 | `Case ID`           | Unique identifier per process   |
 | `Start Timestamp`   | Activity start time             |
 | `Complete Timestamp`| Activity end time               |

@@ -5,6 +5,7 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 ---
 
 ## Project Structure
+```
 .
 ├── main.py # FastAPI backend with endpoints
 ├── unlock.py # Optional pre-processing script for custom logs
@@ -21,7 +22,7 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 │ ├── style.css # Styling
 │ ├── script.js # Frontend behavior
 └── ...
-
+```
 ---
 
 ## :rocket: Features

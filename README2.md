@@ -61,7 +61,7 @@ Input logs **must be in CSV format** and include the following columns:
 The upload section allows you to load an event log. A default log (PurchasingExample) is used if no file is selected.
 
 To use your own event log:
-1. Uncomment the line '''#RUN python3 unlock.py''' in the Dockerfile.
+1. Uncomment the line `#RUN python3 unlock.py` in the Dockerfile.
 2. Rebuild and re-run the container.
 
 ---

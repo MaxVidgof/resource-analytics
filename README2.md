@@ -52,7 +52,7 @@ Input logs **must be in CSV format** and include the following columns:
 - `Start Timestamp`   : Activity start time             
 - `Complete Timestamp`: Activity end time               
 - `Activity`          : Activity name                   
-- `Resource`          : Human resource identifier       
+- `Resource`          : Resource name/identifier       
 - `Role`              : Role of the resource            
 
 ---
@@ -63,6 +63,8 @@ The upload section allows you to load an event log. A default log (PurchasingExa
 To use your own event log:
 1. Uncomment the line '''#RUN python3 unlock.py''' in the Dockerfile.
 2. Rebuild and re-run the container.
+
+---
 
 ## :brain: Analyses Types & Descriptions
 After upload, choose from multiple analysis options in the dropdown. Categories include:
@@ -82,13 +84,13 @@ After upload, choose from multiple analysis options in the dropdown. Categories 
 
 | **Analysis**                                      | **Description** |
 |:--------------------------------------------------|:----------------|
-| **Duration per Role**                             | Average duration of cases broken down by the role of the executing resource. |
-| **Duration per Role and Resource**                | Average duration per case for each combination of role and resource. |
-| **Duration per Activity**                         | Shows how long each activity takes on average. |
-| **Duration per Activity and Role (Heatmap)**      | Visual heatmap of average durations for each activity-role pair. |
-| **Duration per Activity and Resource**            | Displays average time per activity for each resource. |
-| **Duration per Activity and Resource (Heatmap)**  | Heatmap showing activity durations by resource. |
-| **Duration per Activity and Resource by Role (Heatmap)** | Triple-dimension heatmap showing how role affects activity durations across resources. |
+| **Duration per Role**                             | Average case duration broken down by the role of the executing resource. |
+| **Duration per Role and Resource**                | Average case duration for each combination of role and resource. |
+| **Duration per Activity**                         | Average case duration per activity. |
+| **Duration per Activity and Role (Heatmap)**      | Heatmap of average case durations for each activity-role pair. |
+| **Duration per Activity and Resource**            | Displays average case duration per resource for each activity. |
+| **Duration per Activity and Resource (Heatmap)**  | Heatmap of average case durations for each activity-resource pair. |
+| **Duration per Activity and Resource by Role (Heatmap)** | Heatmaps fof average case durations for each activity-resource pair within a role. |
 
 ---
 
@@ -96,8 +98,8 @@ After upload, choose from multiple analysis options in the dropdown. Categories 
 
 | **Analysis**            | **Description** |
 |:-------------------------|:----------------|
-| **Role by Resource**     | Number of events handled by each role-resource combination over time. |
-| **Activity by Resource** | How workload is distributed across resources for each activity. |
+| **Role by Resource**     | Proportion of time each individual resource spent performing different roles in relation to their total time available. |
+| **Activity by Resource** | How each resource distributed their time across their assigned activities. |
 | **Activity by Role**     | Similar to above, but aggregated by role instead of resource. |
 
 ---
@@ -105,10 +107,11 @@ After upload, choose from multiple analysis options in the dropdown. Categories 
 #### Capacity Utilization
 
 | **Analysis**                      | **Description** |
-|:----------------------------------|:----------------|
-| **Resource Capacity Utilization** | Utilization rates of each individual resource based on activity timing. |
-| **Role Capacity Utilization**     | Aggregated utilization of roles across the organization. |
-| **Activity Capacity Utilization** | Identifies activities with the most resource load relative to availability. |
+|-----------------------------------|-----------------|
+| **Resource Capacity Utilization** | Shows how effectively each individual resource's available working time is utilized by comparing their actual task duration against an estimated total available time per day. |
+| **Role Capacity Utilization**     | Aggregates capacity utilization across all resources assigned to a given role, indicating how intensively the collective time of that role is used in the process. |
+| **Activity Capacity Utilization** | Measures how much time resources theoretically allocated to each activity compared to the actual time spent. |
+
 
 
 Each option triggers a backend API to generate plots and tables using Plotly and Tabulator.

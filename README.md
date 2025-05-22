@@ -17,11 +17,10 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 ├── hardcoded # event logs
 │ ├── PurchasingExample.csv # example event log
 │ ├── PurchasingEexamplePseudo.csv # example event log with pseudonomization (default log)
-├── static/
+├── static
 │ ├── index.html # Frontend HTML
 │ ├── style.css # Styling
 │ ├── script.js # Frontend behavior
-└── ...
 ```
 ---
 

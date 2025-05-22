@@ -38,9 +38,9 @@ The following **Resource Analytics Tool** is a web-based application for analyzi
 
 ## :whale: Docker Usage
 
-1. Build the container: '''docker build -t resource-analytics .'''
-2. Run the container: '''docker run -p 9090:9090 -ti resource-analytics'''
-3. Access the interface: open your browser and navigate to: http://localhost:9090
+1. Build the container: `docker build -t resource-analytics .`
+4. Run the container: `docker run -p 9090:9090 -ti resource-analytics`
+5. Access the interface: open your browser and navigate to: http://localhost:9090
 
 ---
 
@@ -71,7 +71,7 @@ After upload, choose from multiple analysis options in the dropdown. Categories 
 #### Resource Allocation
 
 | **Analysis**               | **Description** |
-|----------------------------|-----------------|
+|:---------------------------|:----------------|
 | **Unique Resources**       | Counts the number of distinct resources involved in the event log. |
 | **Roles per Resource**     | Displays how many roles each resource has taken on. |
 | **Resources per Activity** | Shows how many different resources performed each activity. |
@@ -82,7 +82,7 @@ After upload, choose from multiple analysis options in the dropdown. Categories 
 #### Case Duration
 
 | **Analysis**                                      | **Description** |
-|---------------------------------------------------|-----------------|
+|:--------------------------------------------------|:----------------|
 | **Duration per Role**                             | Average duration of cases broken down by the role of the executing resource. |
 | **Duration per Role and Resource**                | Average duration per case for each combination of role and resource. |
 | **Duration per Activity**                         | Shows how long each activity takes on average. |
@@ -96,7 +96,7 @@ After upload, choose from multiple analysis options in the dropdown. Categories 
 #### Workload Distribution
 
 | **Analysis**            | **Description** |
-|--------------------------|-----------------|
+|:-------------------------|:----------------|
 | **Role by Resource**     | Number of events handled by each role-resource combination over time. |
 | **Activity by Resource** | How workload is distributed across resources for each activity. |
 | **Activity by Role**     | Similar to above, but aggregated by role instead of resource. |
@@ -106,7 +106,7 @@ After upload, choose from multiple analysis options in the dropdown. Categories 
 #### Capacity Utilization
 
 | **Analysis**                      | **Description** |
-|-----------------------------------|-----------------|
+|:----------------------------------|:----------------|
 | **Resource Capacity Utilization** | Utilization rates of each individual resource based on activity timing. |
 | **Role Capacity Utilization**     | Aggregated utilization of roles across the organization. |
 | **Activity Capacity Utilization** | Identifies activities with the most resource load relative to availability. |

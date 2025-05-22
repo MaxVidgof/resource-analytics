@@ -107,7 +107,7 @@ After upload, choose from multiple analysis options in the dropdown. Categories 
 #### Capacity Utilization
 
 | **Analysis**                      | **Description** |
-|-----------------------------------|-----------------|
+|:----------------------------------|:----------------|
 | **Resource Capacity Utilization** | Shows how effectively each individual resource's available working time is utilized by comparing their actual task duration against an estimated total available time per day. |
 | **Role Capacity Utilization**     | Aggregates capacity utilization across all resources assigned to a given role, indicating how intensively the collective time of that role is used in the process. |
 | **Activity Capacity Utilization** | Measures how much time resources theoretically allocated to each activity compared to the actual time spent. |

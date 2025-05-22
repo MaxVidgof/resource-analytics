@@ -1,4 +1,4 @@
-ƒconst baseUrl = "http://localhost:9090"
+const baseUrl = "http://localhost:9090"
 // Custom selector
 document.querySelectorAll('.custom-select').forEach(function(select) {
     var container = document.createElement('div');

@@ -5,6 +5,7 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import seaborn as sns
+from typing import Union
 
 import pm4py
 from colorize import colorize_net, get_colors, split_equal
@@ -19,7 +20,7 @@ class OutputModel(BaseModel):
     image: str | None = None
     text: str | None = None
     plot: Union[str, list[str], None] = None
-    big_plot: Union[str, List[str], None] = None
+    big_plot: Union[str, list[str], None] = None
     process_model: str | None = None
 
 
@@ -780,16 +781,18 @@ def activity_resource_role_comparison(df, normalize: bool = False):
         plot_list = []
         unique_roles = normalized_data['Role'].unique()
 
-        for role in unique_roles:     
-            role_df = normalized_data[normalized_data['Role'] == "Supplier"]
+        fig = make_subplots(rows=len(unique_roles), cols=1, subplot_titles=[f'Role: {role}' for role in unique_roles])
+        for i, role in enumerate(unique_roles, 1):     
+            role_df = normalized_data[normalized_data['Role'] == role]
             pivot_table = role_df.pivot(index='Activity', columns='Resource', values='Normalized Duration')
     
             # Define the hover text to show both the average duration in minutes and the normalized value
             hover_text = role_df.pivot(index='Activity', columns='Resource', values='Average Case Duration (Minutes)')
             hover_text = hover_text.applymap(lambda x: f'Average Case Duration: {x:.2f} minutes' if pd.notnull(x) else '')
 
+
             # Now create the heatmap using Plotly
-            fig = go.Figure(data=go.Heatmap(
+            fig.add_trace(go.Heatmap(
                 z=pivot_table.values,
                 x=pivot_table.columns,
                 y=pivot_table.index,
@@ -798,23 +801,26 @@ def activity_resource_role_comparison(df, normalize: bool = False):
                 colorscale=color_scale,
                 colorbar=dict(title='Average Case Duration (normalized)', tickvals=[0, 1], ticktext=['Fastest<br>Resource', 'Slowest<br>Resource'], titleside='right'),
                 showscale=True,
-                xgap=2,
-                ygap=2
-            ))
+                xgap=10,
+                ygap=20,
+            ), row=i, col=1)
+            #fig.update_xaxes(p, row=i, col=1)
+
 
             # Update the layout
-            fig.update_layout(
-                title=dict(text='Normalized Average Case Duration per Activity and Resource<br><sup>Role: {role}</sup>',x=0.5, xanchor='center'),
-                xaxis=dict(title='Resource'),
-                yaxis=dict(title='Activity'),
-                #width=1200,
-                height=600,
-                plot_bgcolor='white'
-            )
+        fig.update_layout(
+            title=dict(text='Normalized Average Case Duration per Activity and Resource',x=0.5, xanchor='center'),
+            xaxis=dict(title='Resource'),
+            yaxis=dict(title='Activity'),
+            showlegend=False,
+            #width=1200,
+            height=576*len(unique_roles),
+            plot_bgcolor='white'
+        )
     
-            plot_list.append(fig.to_json())
+            #plot_list.append(fig.to_json())
 
-    return OutputModel(table=[], big_plot=json.dumps(["test"]))
+    return OutputModel(table=prettify_df(normalized_data).replace({np.nan: None}).to_dict(orient="records"), big_plot=fig.to_json())
 
 
 
